@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button} from 'antd';
 import './App.css';
 import {getArticles} from './common/api.js';
 
@@ -45,6 +46,7 @@ class App extends React.Component{
         { isLoaded?items[0].title:<p>Loading...</p>
             }
         </p>
+        <Button type="primary">Button</Button>
        
       </header>
     </div>
