@@ -10,3 +10,13 @@
 .span {
   margin-left: 5px;
 }
+.tags {
+  display: inline-block;
+}
+.newsHeader {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  background-color: #f0f2f5;
+  box-shadow: 0 2px 8px #a3a3a3;
+}

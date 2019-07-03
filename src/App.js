@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
-import { Row, Col } from "antd";
+import { Row, Col, Tag, Layout } from "antd";
 import { Card, Icon, Avatar } from "antd";
 import "./App.css";
-import { getArticles } from "./common/api.js";
+import { getArticles, getTags } from "./common/api.js";
 
 const { Meta } = Card;
+const { Header, Content } = Layout;
 
 class App extends React.Component {
   constructor(props) {
@@ -12,84 +13,90 @@ class App extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      items: [],
+      tags: []
     };
   }
 
   componentDidMount() {
-    getArticles().then(
-      result => {
-        console.log(result);
-        this.setState({
-          isLoaded: true,
-          items: result.data
-        });
-      },
-      error => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-      }
-    );
+    getArticles().then(result => {
+      console.log(result);
+      this.setState({
+        isLoaded: true,
+        items: result.data
+      });
+    });
+    getTags().then(result => {
+      console.log(result);
+      this.setState({
+        tags: result.data
+      });
+    });
+  }
+  tagsList() {
+    const { tags } = this.state;
+    const listTags = tags.map(({ name }) => (
+      <Tag className="tags" key={name}>
+        #{name}
+      </Tag>
+    ));
+    return listTags;
   }
   dataList() {
     const { isLoaded, items } = this.state;
-    const listItems = items.map(item => (
-      <div key={item.title}>
-        {
-          <Card
-            cover={
-              <img
-                alt="example"
-                src={
-                  isLoaded
-                    ? item.cover_image
-                    : "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                }
-              />
-            }
-            actions={[
-              <Fragment>
-                <Icon type="heart" />
-                <span className="span">{item.positive_reactions_count}</span>
-              </Fragment>,
-              <Fragment>
-                <Icon type="message" />
-                <span className="span">{item.comments_count}</span>
-              </Fragment>
-            ]}
-          >
-            <Meta
-              avatar={
-                <Avatar
-                  src={
-                    isLoaded
-                      ? item.user.profile_image
-                      : "https://res.cloudinary.com/practicaldev/image/fetch/s--4ETXDUD6--/c_fill,f_auto,fl_progressive,h_640,q_auto,w_640/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/173804/3c7fd4e8-d961-4163-8178-4d3693a60c48.jpg"
-                  }
-                />
-              }
-              title={isLoaded ? item.title : <p>Loading...</p>}
-              description={isLoaded ? item.description : <p>Loading...</p>}
-            />
-          </Card>
-        }
-      </div>
-    ));
-    return <ul>{listItems}</ul>;
+    const listItems = items.map(
+      ({
+        cover_image,
+        title,
+        positive_reactions_count,
+        comments_count,
+        user: { profile_image },
+        description
+      }) => (
+        <Card
+          key={title}
+          loading={!isLoaded}
+          cover={cover_image && <img alt="example" src={cover_image} />}
+          actions={[
+            <Fragment>
+              <Icon type="heart" />
+              <span className="span">{positive_reactions_count}</span>
+            </Fragment>,
+            <Fragment>
+              <Icon type="message" />
+              <span className="span">{comments_count}</span>
+            </Fragment>
+          ]}
+        >
+          <Meta
+            avatar={<Avatar src={profile_image} />}
+            title={title}
+            description={description}
+          />
+        </Card>
+      )
+    );
+    return listItems;
   }
   render() {
     const cards = this.dataList();
+    const tags = this.tagsList();
     return (
       <div className="App">
         <header className="App-header">
           <div>
-            <Row>
-              <Col span={12} offset={6}>
-                {cards}
-              </Col>
-            </Row>
+            <Layout>
+              <Header className="newsHeader">
+                <Row>{tags}</Row>
+              </Header>
+              <Content style={{ padding: "0 50px", marginTop: 64 }}>
+                <Row>
+                  <Col span={12} offset={6}>
+                    {cards}
+                  </Col>
+                </Row>
+              </Content>
+            </Layout>
           </div>
         </header>
       </div>
