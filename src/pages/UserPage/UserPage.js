@@ -1,7 +1,7 @@
 import React from "react";
 import { getUser } from "../../common/api";
 
-import { Card, Icon, Avatar, Row, Col } from "antd";
+import { Card, Icon, Avatar, Row, Col, Descriptions } from "antd";
 
 const { Meta } = Card;
 
@@ -25,19 +25,55 @@ class UserPage extends React.Component {
   render() {
     const {
       isLoaded,
-      users: { name, profile_image, summary, username }
+      users: {
+        name,
+        profile_image,
+        summary,
+        username,
+        location,
+        joined_at,
+        github_username,
+        twitter_username
+      }
     } = this.state;
     return (
-      <Row>
-        <Col span={18}>
-          <Card key={username} loading={!isLoaded} hoverable>
+      <Row gutter={16}>
+        <Card key={username} loading={!isLoaded} hoverable>
+          <Col span={16}>
             <Meta
               avatar={<Avatar size={200} src={profile_image} />}
-              title={name}
+              title={
+                <div>
+                  <h1>{name}</h1>
+                  <span>@{username}</span>
+                </div>
+              }
               description={summary}
             />
-          </Card>
-        </Col>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://github.com/${github_username}`}
+            >
+              <Icon className="icons" type="github" />
+            </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://twitter.com/${twitter_username}`}
+            >
+              <Icon className="icons" type="twitter" />
+            </a>
+          </Col>
+          <Col span={8}>
+            <Descriptions layout="vertical" bordered>
+              <Descriptions.Item label="Location">{location}</Descriptions.Item>
+              <Descriptions.Item label="Joined at">
+                {joined_at}
+              </Descriptions.Item>
+            </Descriptions>
+          </Col>
+        </Card>
       </Row>
     );
   }

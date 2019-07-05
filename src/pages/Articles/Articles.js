@@ -17,6 +17,17 @@ class Articles extends React.Component {
       tags: []
     };
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.tag !== this.props.match.params.tag) {
+      getArticles(this.props.match.params.tag).then(result => {
+        console.log(result);
+        this.setState({
+          isLoaded: true,
+          items: result.data
+        });
+      });
+    }
+  }
   componentDidMount() {
     getArticles(this.props.match.params.tag).then(result => {
       console.log(result);
@@ -52,7 +63,7 @@ class Articles extends React.Component {
         title,
         positive_reactions_count,
         comments_count,
-        user: { profile_image },
+        user: { profile_image, username },
         description
       }) => (
         <Card
@@ -71,7 +82,11 @@ class Articles extends React.Component {
           ]}
         >
           <Meta
-            avatar={<Avatar src={profile_image} />}
+            avatar={
+              <a href={`/user/${username}`}>
+                <Avatar src={profile_image} />
+              </a>
+            }
             title={title}
             description={description}
           />
