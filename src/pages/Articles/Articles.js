@@ -1,11 +1,10 @@
-import React, { Fragment } from "react";
-import { Row, Col, Tag, Layout } from "antd";
-import { Card, Icon, Avatar } from "antd";
-import { getArticles, getTags } from "../../common/api";
+import { Col, Layout, Row, Tag } from "antd";
+import React from "react";
 import { Link } from "react-router-dom";
+import { getArticles, getTags } from "../../common/api";
+import Article from "../../components/Article/Article";
 
 const { Header, Content } = Layout;
-const { Meta } = Card;
 
 class Articles extends React.Component {
   constructor(props) {
@@ -17,25 +16,27 @@ class Articles extends React.Component {
       tags: []
     };
   }
-  componentDidUpdate(prevProps) {
-    if (prevProps.match.params.tag !== this.props.match.params.tag) {
-      getArticles(this.props.match.params.tag).then(result => {
-        console.log(result);
-        this.setState({
-          isLoaded: true,
-          items: result.data
-        });
-      });
-    }
-  }
-  componentDidMount() {
-    getArticles(this.props.match.params.tag).then(result => {
+  getArtData() {
+    const {
+      match: {
+        params: { tag }
+      }
+    } = this.props;
+    getArticles(tag).then(result => {
       console.log(result);
       this.setState({
         isLoaded: true,
         items: result.data
       });
     });
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.tag !== this.props.match.params.tag) {
+      this.getArtData();
+    }
+  }
+  componentDidMount() {
+    this.getArtData();
     getTags().then(result => {
       console.log(result);
       this.setState({
@@ -66,31 +67,16 @@ class Articles extends React.Component {
         user: { profile_image, username },
         description
       }) => (
-        <Card
-          key={title}
-          loading={!isLoaded}
-          cover={cover_image && <img alt="example" src={cover_image} />}
-          actions={[
-            <Fragment>
-              <Icon type="heart" />
-              <span className="span">{positive_reactions_count}</span>
-            </Fragment>,
-            <Fragment>
-              <Icon type="message" />
-              <span className="span">{comments_count}</span>
-            </Fragment>
-          ]}
-        >
-          <Meta
-            avatar={
-              <a href={`/user/${username}`}>
-                <Avatar src={profile_image} />
-              </a>
-            }
-            title={title}
-            description={description}
-          />
-        </Card>
+        <Article
+          cover_image={cover_image}
+          title={title}
+          positive_reactions_count={positive_reactions_count}
+          comments_count={comments_count}
+          profile_image={profile_image}
+          username={username}
+          description={description}
+          isLoaded={isLoaded}
+        />
       )
     );
     return listItems;
@@ -107,7 +93,7 @@ class Articles extends React.Component {
             </Header>
             <Content style={{ padding: "0 50px", marginTop: 64 }}>
               <Row>
-                <Col span={12} offset={6}>
+                <Col xs={{ span: 18 }} ms={{ span: 22, offset: 6 }}>
                   {cards}
                 </Col>
               </Row>

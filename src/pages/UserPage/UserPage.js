@@ -37,8 +37,8 @@ class UserPage extends React.Component {
       }
     } = this.state;
     return (
-      <Row gutter={16}>
-        <Card key={username} loading={!isLoaded} hoverable>
+      <Row gutter={20}>
+        <Card key={username} loading={!isLoaded}>
           <Col span={16}>
             <Meta
               avatar={<Avatar size={200} src={profile_image} />}
@@ -50,27 +50,39 @@ class UserPage extends React.Component {
               }
               description={summary}
             />
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`https://github.com/${github_username}`}
-            >
-              <Icon className="icons" type="github" />
-            </a>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`https://twitter.com/${twitter_username}`}
-            >
-              <Icon className="icons" type="twitter" />
-            </a>
+            <div>
+              {github_username && (
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://github.com/${github_username}`}
+                >
+                  <Icon className="icons" type="github" />
+                </a>
+              )}
+              {twitter_username && (
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://twitter.com/${twitter_username}`}
+                >
+                  <Icon className="icons" type="twitter" />
+                </a>
+              )}
+            </div>
           </Col>
           <Col span={8}>
             <Descriptions layout="vertical" bordered>
-              <Descriptions.Item label="Location">{location}</Descriptions.Item>
-              <Descriptions.Item label="Joined at">
-                {joined_at}
-              </Descriptions.Item>
+              {location && (
+                <Descriptions.Item label="Location">
+                  {location}
+                </Descriptions.Item>
+              )}
+              {joined_at && (
+                <Descriptions.Item label="Joined at">
+                  {joined_at}
+                </Descriptions.Item>
+              )}
             </Descriptions>
           </Col>
         </Card>
