@@ -1,6 +1,6 @@
 import React from "react";
 import { getArtById } from "../../common/api";
-
+import "./FullArticle.scss";
 class FullArticle extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +21,12 @@ class FullArticle extends React.Component {
   }
   render() {
     const { item } = this.state;
-    return <div dangerouslySetInnerHTML={{ __html: item.body_html }} />;
+    return (
+      <div
+        className="full-article"
+        dangerouslySetInnerHTML={{ __html: item.body_html }}
+      />
+    );
   }
 }
 
