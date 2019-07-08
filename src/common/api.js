@@ -13,3 +13,11 @@ export function getUser(username) {
 export function getTags() {
   return axios.get("https://dev.to/api/tags");
 }
+
+export function getArtByUser(username) {
+  return axios.get(`https://dev.to/api/articles?username=${username}`);
+}
+
+export function getArtById(id) {
+  return axios.get(`https://dev.to/api/articles/${id}`);
+}
