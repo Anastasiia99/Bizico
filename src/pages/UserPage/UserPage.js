@@ -72,7 +72,6 @@ class UserPage extends React.Component {
       }
     } = this.state;
     const cards = this.dataList();
-    console.log(this.state);
     return (
       <div>
         <Row gutter={20}>

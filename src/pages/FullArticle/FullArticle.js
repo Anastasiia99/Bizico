@@ -21,7 +21,6 @@ class FullArticle extends React.Component {
   }
   render() {
     const { item } = this.state;
-    console.log(item.body_html);
     return <div dangerouslySetInnerHTML={{ __html: item.body_html }} />;
   }
 }

@@ -13,7 +13,8 @@ class Article extends React.Component {
       positive_reactions_count,
       username,
       profile_image,
-      description
+      description,
+      id
     } = this.props;
     return (
       <Card
@@ -37,7 +38,11 @@ class Article extends React.Component {
               <Avatar src={profile_image} />
             </a>
           }
-          title={title}
+          title={
+            <a className="links" href={`/articles/${id}`}>
+              {title}
+            </a>
+          }
           description={description}
         />
       </Card>

@@ -43,7 +43,8 @@ class Articles extends React.Component {
         positive_reactions_count,
         comments_count,
         user: { profile_image, username },
-        description
+        description,
+        id
       }) => (
         <Article
           key={title}
@@ -55,6 +56,7 @@ class Articles extends React.Component {
           username={username}
           description={description}
           isLoaded={isLoaded}
+          id={id}
         />
       )
     );
