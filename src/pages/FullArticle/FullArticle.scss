@@ -1,5 +1,20 @@
 .full-article {
   font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  line-height: 32px;
+  position: relative;
+  padding-bottom: 5px;
+  overflow-wrap: break-word;
   text-align: left;
   margin-top: 20px;
+  h1.longer {
+    font-size: calc(1.48vw + 22px);
+  }
+  img {
+    width: 100%;
+  }
+  .coverImg {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import { getArtById } from "../../common/api";
 import "./FullArticle.scss";
+import { Row, Col } from "antd";
+
 class FullArticle extends React.Component {
   constructor(props) {
     super(props);
@@ -20,12 +22,22 @@ class FullArticle extends React.Component {
     });
   }
   render() {
-    const { item } = this.state;
+    const {
+      item: { body_html, title, cover_image }
+    } = this.state;
     return (
-      <div
-        className="full-article"
-        dangerouslySetInnerHTML={{ __html: item.body_html }}
-      />
+      <div className="full-article">
+        <Row>
+          <Col span={23}>
+            {cover_image && (
+              <img className="coverImg" alt=" " src={cover_image} />
+            )}
+
+            <h1 className="longer">{title}</h1>
+            <div dangerouslySetInnerHTML={{ __html: body_html }} />
+          </Col>
+        </Row>
+      </div>
     );
   }
 }
