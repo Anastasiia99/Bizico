@@ -28,7 +28,7 @@ class FullArticle extends React.Component {
     return (
       <div className="full-article">
         <Row>
-          <Col span={23}>
+          <Col span={23} offset={1}>
             {cover_image && (
               <img className="coverImg" alt=" " src={cover_image} />
             )}

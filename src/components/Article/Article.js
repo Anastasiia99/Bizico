@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Card, Icon, Avatar } from "antd";
+import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -8,40 +9,42 @@ class Article extends React.Component {
     const {
       title,
       isLoaded,
-      comments_count,
-      cover_image,
-      positive_reactions_count,
+      commentsCount,
+      coverImage,
+      positiveReactionsCount,
       username,
-      profile_image,
+      profileImage,
       description,
-      id
+      id,
+      hideAvatar
     } = this.props;
+    const avatar = hideAvatar ? null : (
+      <Link to={`/user/${username}`}>
+        <Avatar src={profileImage} />
+      </Link>
+    );
     return (
       <Card
         key={title}
         loading={!isLoaded}
-        cover={cover_image && <img alt="example" src={cover_image} />}
+        cover={coverImage && <img alt="example" src={coverImage} />}
         actions={[
           <Fragment>
             <Icon type="heart" />
-            <span className="span">{positive_reactions_count}</span>
+            <span className="span">{positiveReactionsCount}</span>
           </Fragment>,
           <Fragment>
             <Icon type="message" />
-            <span className="span">{comments_count}</span>
+            <span className="span">{commentsCount}</span>
           </Fragment>
         ]}
       >
         <Meta
-          avatar={
-            <a href={`/user/${username}`}>
-              <Avatar src={profile_image} />
-            </a>
-          }
+          avatar={avatar}
           title={
-            <a className="links" href={`/articles/${id}`}>
+            <Link className="links" to={`/articles/${id}`}>
               {title}
-            </a>
+            </Link>
           }
           description={description}
         />
@@ -50,4 +53,5 @@ class Article extends React.Component {
   }
 }
 
+Article.defaultProps = { hideAvatar: false };
 export default Article;
