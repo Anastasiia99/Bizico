@@ -1,10 +1,24 @@
 import axios from "axios";
 
-export function getArticles(tag) {
-  if (tag) {
-    return axios.get(`https://dev.to/api/articles?tag=${tag}`);
+export function getArticles(tag, page) {
+  let url = "https://dev.to/api/articles";
+
+  if (tag || page) {
+    let params = [];
+    url += "?";
+
+    if (page) {
+      params.push(`page=${page}`);
+    }
+
+    if (tag) {
+      params.push(`tag=${tag}`);
+    }
+
+    url += params.join("&");
   }
-  return axios.get("https://dev.to/api/articles");
+
+  return axios.get(url);
 }
 
 export function getUser(username) {

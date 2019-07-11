@@ -13,7 +13,8 @@ class UserPage extends React.Component {
     this.state = {
       isLoaded: false,
       users: [],
-      items: []
+      items: [],
+      tmpItems: []
     };
   }
   componentDidMount() {
@@ -28,11 +29,23 @@ class UserPage extends React.Component {
     getArtByUser(this.props.match.params.username).then(result => {
       console.log(result);
       this.setState({
-        items: result.data
+        items: result.data,
+        tmpItems: result.data
       });
     });
   }
-  handleChange = value => {
+  handleChange = e => {
+    const value = e.target.value;
+    if (value) {
+      this.setState({
+        items: this.state.items.filter(item =>
+          item.title.toLowerCase().includes(value.toLowerCase())
+        )
+      });
+    } else
+      this.setState({
+        items: this.state.tmpItems
+      });
     console.log(`selected ${value}`);
   };
   dataList() {
@@ -147,8 +160,8 @@ class UserPage extends React.Component {
           <Search
             className="search"
             placeholder="Search"
-            onSearch={this.handleChange}
-            enterButton
+            onChange={this.handleChange}
+            allowClear
           />
           <Row>{cards}</Row>
         </Col>
