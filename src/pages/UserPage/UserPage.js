@@ -1,10 +1,11 @@
 import React from "react";
 import { getUser, getArtByUser } from "../../common/api";
 
-import { Card, Icon, Avatar, Col, Descriptions, Row } from "antd";
+import { Card, Icon, Avatar, Col, Descriptions, Row, Input } from "antd";
 import Article from "../../components/Article/Article";
 
 const { Meta } = Card;
+const { Search } = Input;
 
 class UserPage extends React.Component {
   constructor(props) {
@@ -31,6 +32,9 @@ class UserPage extends React.Component {
       });
     });
   }
+  handleChange = value => {
+    console.log(`selected ${value}`);
+  };
   dataList() {
     const { isLoaded, items } = this.state;
 
@@ -78,71 +82,76 @@ class UserPage extends React.Component {
     const cards = this.dataList();
     return (
       <div>
-        <Row>
-          <Col
-            xs={{ span: 20, offset: 2 }}
-            md={{ span: 16, offset: 4 }}
-            lg={{ span: 14, offset: 5 }}
-          >
+        <Col
+          xs={{ span: 20, offset: 2 }}
+          md={{ span: 16, offset: 4 }}
+          lg={{ span: 14, offset: 5 }}
+        >
+          <Row>
             <Card key={username} loading={!isLoaded}>
-              <Col span={16}>
-                <Meta
-                  avatar={<Avatar size={200} src={profile_image} />}
-                  title={
-                    <div>
-                      <h1>{name}</h1>
-                      <span>@{username}</span>
-                    </div>
-                  }
-                  description={summary}
-                />
-                <div>
-                  {github_username && (
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`https://github.com/${github_username}`}
+              <Meta
+                avatar={
+                  <div>
+                    <Row>
+                      <Avatar size={170} src={profile_image} />
+                    </Row>
+                    <Row>
+                      {github_username && (
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={`https://github.com/${github_username}`}
+                        >
+                          <Icon className="icons" type="github" />
+                        </a>
+                      )}
+                      {twitter_username && (
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={`https://twitter.com/${twitter_username}`}
+                        >
+                          <Icon className="icons" type="twitter" />
+                        </a>
+                      )}
+                    </Row>
+                  </div>
+                }
+                title={
+                  <div>
+                    <h1>{name}</h1>
+                    <span>@{username}</span>
+                  </div>
+                }
+                description={
+                  <div>
+                    {summary}
+                    <Descriptions
+                      className="descript"
+                      border
+                      column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+                      layout="vertical"
                     >
-                      <Icon className="icons" type="github" />
-                    </a>
-                  )}
-                  {twitter_username && (
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`https://twitter.com/${twitter_username}`}
-                    >
-                      <Icon className="icons" type="twitter" />
-                    </a>
-                  )}
-                </div>
-              </Col>
-              <Col span={8}>
-                <Descriptions layout="vertical" bordered>
-                  {Boolean(location) && (
-                    <Descriptions.Item label="Location">
-                      {location}
-                    </Descriptions.Item>
-                  )}
-                  {joined_at && (
-                    <Descriptions.Item label="Joined at">
-                      {joined_at}
-                    </Descriptions.Item>
-                  )}
-                </Descriptions>
-              </Col>
+                      <Descriptions.Item label="Location">
+                        {location}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Joined at">
+                        {joined_at}
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </div>
+                }
+              />
             </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            xs={{ span: 20, offset: 2 }}
-            md={{ span: 16, offset: 4 }}
-            lg={{ span: 14, offset: 5 }}
-          >
-            {cards}
-          </Col>
-        </Row>
+          </Row>
+          <Search
+            className="search"
+            placeholder="Search"
+            onSearch={this.handleChange}
+            enterButton
+          />
+          <Row>{cards}</Row>
+        </Col>
       </div>
     );
   }
