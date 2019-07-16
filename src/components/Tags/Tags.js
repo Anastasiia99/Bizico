@@ -1,7 +1,8 @@
 import React from "react";
-import { Layout, Select, Tag, Row, Col } from "antd";
+import { Layout, Select, Tag, Row, Col, Button } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { getTags } from "../../common/api";
+import Cookies from "js-cookie";
 import icon from "../../assets/icon.svg";
 
 const { Header } = Layout;
@@ -59,11 +60,21 @@ class Tags extends React.Component {
     this.props.history.push(`/${value}`);
   };
 
+  logout = () => {
+    this.props.history.push("/auth/login");
+    Cookies.set("user", "0.0");
+  };
   render() {
     const { width } = this.state;
+    console.log(this.props);
 
-    if (width > 990) {
+    if (this.props.history.location.pathname === "/auth/login") {
+      return null;
+    }
+
+    if (width > 1075) {
       const tags = this.tagsList();
+
       return (
         <Header className="newsHeader">
           <Row>
@@ -72,7 +83,10 @@ class Tags extends React.Component {
                 <img className="mainIcon" alt="" src={icon} />
               </Link>
             </Col>
-            <Col span={22}>{tags}</Col>
+            <Col span={20}>{tags}</Col>
+            <Button type="primary" htmlType="submit" onClick={this.logout}>
+              Log out
+            </Button>
           </Row>
         </Header>
       );
@@ -99,6 +113,10 @@ class Tags extends React.Component {
               {tags}
             </Select>
           </Col>
+
+          <Button type="primary" htmlType="submit" onClick={this.logout}>
+            Log out
+          </Button>
         </Header>
       );
     }

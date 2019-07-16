@@ -1,16 +1,34 @@
-import { Col } from "antd";
+import { Col, Spin } from "antd";
 import React from "react";
 import { getArticles } from "../../common/api";
 import Article from "../../components/Article/Article";
+import InfiniteScroll from "react-infinite-scroller";
 
 class Articles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoaded: false,
-      items: []
+      items: [],
+      hasMoreItems: true,
+      nextHref: null
     };
   }
+  loadItems = page => {
+    const {
+      match: {
+        params: { tag }
+      }
+    } = this.props;
+    console.log(page);
+    getArticles(tag, page).then(result => {
+      console.log(result);
+      this.setState({
+        isLoaded: true,
+        items: [...this.state.items, ...result.data]
+      });
+    });
+  };
   getArtData() {
     const {
       match: {
@@ -47,7 +65,7 @@ class Articles extends React.Component {
         id
       }) => (
         <Article
-          key={title}
+          key={`${title}-${username}`}
           coverImage={cover_image}
           title={title}
           positiveReactionsCount={positive_reactions_count}
@@ -70,7 +88,14 @@ class Articles extends React.Component {
         md={{ span: 16, offset: 4 }}
         lg={{ span: 14, offset: 5 }}
       >
-        {cards}
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadItems}
+          hasMore={this.state.hasMoreItems}
+          loader={<Spin className="spin" tip="Loading..." />}
+        >
+          {cards}
+        </InfiniteScroll>
       </Col>
     );
   }
