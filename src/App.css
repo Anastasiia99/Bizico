@@ -2,6 +2,15 @@
 body {
   background-color: #f0f2f5;
 }
+.username.darkUser {
+  color: white;
+}
+.layout {
+  background-color: #f0f2f5;
+}
+.layout.darkLayout {
+  background-color: #0d1219;
+}
 img.rainbowdevimage {
   width: 190px;
   height: 190px;
@@ -28,9 +37,15 @@ img.rainbowdevimage {
   margin-top: 20px;
 }
 
-.ant-card {
+.card {
   margin-top: 16px;
 }
+.card.darkCard {
+  background: #202c3d;
+  color: white;
+  border-color: #22303f;
+}
+
 .span {
   margin-left: 5px;
 }
@@ -44,12 +59,34 @@ img.rainbowdevimage {
   background-color: #f0f2f5;
   box-shadow: 0 2px 8px #a3a3a3;
 }
+
+.newsHeader.darkMode {
+  background-color: #202c3d;
+  box-shadow: 0 2px 8px #4e6b94;
+}
+.logout {
+  margin-left: 20px;
+}
+.settIcon {
+  font-size: 20px;
+  margin-left: 20px;
+}
+.settIcon.settDark {
+  color: white;
+}
 .icons {
   color: black;
   font-size: 30px;
   margin-right: 10px;
   margin-top: 10px;
 }
+.icons.darkIcons {
+  color: white;
+}
+.likes.darkLikes {
+  color: #a3a3a3;
+}
+
 .search {
   margin-top: 16px;
 }
@@ -61,9 +98,26 @@ img.rainbowdevimage {
 
   padding: 7px 8px 6px 10px;
 }
+.mainIcon.darkIcon {
+  background-color: white;
+  border-radius: 2px;
+}
 .links {
   color: black;
 }
+.links.darkLinks {
+  color: white;
+}
 .descript {
   margin-top: 15px;
+}
+.descript.darkDescr {
+  color: #a3a3a3;
+}
+
+.user {
+  background-color: white;
+}
+.user.darkUser {
+  background-color: #202c3d;
 }

@@ -1,22 +1,25 @@
 import React from "react";
-import { Layout, Select, Tag, Row, Col, Button } from "antd";
+import { Layout, Select, Col, Button, Modal, Icon, Switch } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { getTags } from "../../common/api";
 import Cookies from "js-cookie";
 import icon from "../../assets/icon.svg";
+import { SettingContext } from "../../common/SettingConProv";
 
 const { Header } = Layout;
 const { Option } = Select;
+const classNames = require("classnames");
 
 class Tags extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 0,
-      height: 0,
-      tags: []
+      tags: [],
+      visible: false
     };
   }
+  static contextType = SettingContext;
+
   componentDidMount() {
     getTags().then(result => {
       console.log(result);
@@ -24,28 +27,8 @@ class Tags extends React.Component {
         tags: result.data
       });
     });
-    this.updateWindowDimensions();
-    window.addEventListener("resize", this.updateWindowDimensions);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateWindowDimensions);
-  }
-  updateWindowDimensions = () => {
-    this.setState({ width: window.innerWidth, height: window.innerHeight });
-  };
-
-  tagsList() {
-    const { tags } = this.state;
-    const listTags = tags.map(({ name }) => (
-      <Tag className="tags" key={name}>
-        <Link to={`/${name}`}>
-          <span>#{name}</span>
-        </Link>
-      </Tag>
-    ));
-    return listTags;
-  }
   tagsSelect() {
     const { tags } = this.state;
     const listTags = tags.map(({ name }) => (
@@ -55,6 +38,23 @@ class Tags extends React.Component {
     ));
     return listTags;
   }
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  onChange = checked => {
+    console.log(`switch to ${checked}`);
+  };
+
   handleChange = value => {
     console.log(`selected ${value}`);
     this.props.history.push(`/${value}`);
@@ -65,61 +65,77 @@ class Tags extends React.Component {
     Cookies.set("user", "0.0");
   };
   render() {
-    const { width } = this.state;
-    console.log(this.props);
+    const { mode, changeMode } = this.context;
+    const tags = this.tagsSelect();
+    const isNight = mode === "night";
 
     if (this.props.history.location.pathname === "/auth/login") {
       return null;
     }
 
-    if (width > 1075) {
-      const tags = this.tagsList();
-
-      return (
-        <Header className="newsHeader">
-          <Row>
-            <Col span={2}>
-              <Link to="/">
-                <img className="mainIcon" alt="" src={icon} />
-              </Link>
-            </Col>
-            <Col span={20}>{tags}</Col>
-            <Button type="primary" htmlType="submit" onClick={this.logout}>
-              Log out
-            </Button>
-          </Row>
-        </Header>
-      );
-    } else {
-      const tags = this.tagsSelect();
-      return (
-        <Header className="newsHeader">
-          <Col span={2}>
-            <Link to="/">
-              <img className="mainIcon" alt="" src={icon} />
-            </Link>
-          </Col>
-          <Col
-            xs={{ span: 20, offset: 2 }}
-            md={{ span: 16, offset: 2 }}
-            lg={{ span: 14, offset: 3 }}
+    return (
+      <Header className={classNames("newsHeader", { darkMode: isNight })}>
+        <Col span={2}>
+          <Link to="/">
+            <img
+              className={classNames("mainIcon", {
+                darkIcon: isNight
+              })}
+              alt=""
+              src={icon}
+            />
+          </Link>
+        </Col>
+        <Col
+          xs={{ span: 12, offset: 2 }}
+          md={{ span: 14, offset: 2 }}
+          lg={{ span: 14, offset: 3 }}
+        >
+          <Select
+            size="large"
+            placeholder="Select tag"
+            style={{ width: "100%" }}
+            onChange={this.handleChange}
           >
-            <Select
-              size="large"
-              placeholder="Select tag"
-              style={{ width: "100%" }}
-              onChange={this.handleChange}
-            >
-              {tags}
-            </Select>
-          </Col>
+            {tags}
+          </Select>
+        </Col>
 
-          <Button type="primary" htmlType="submit" onClick={this.logout}>
-            Log out
-          </Button>
-        </Header>
-      );
-    }
+        <Button
+          className="logout"
+          type="primary"
+          htmlType="submit"
+          onClick={this.logout}
+        >
+          Log out
+        </Button>
+
+        <Icon
+          className={classNames("settIcon", {
+            settDark: isNight
+          })}
+          type="setting"
+          theme="outlined"
+          onClick={this.showModal}
+        />
+
+        <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          footer={<div />}
+        >
+          <p>
+            <Switch
+              onChange={changeMode}
+              checkedChildren="🌙"
+              unCheckedChildren="🌞"
+              defaultChecked={mode === "day"}
+            />
+          </p>
+        </Modal>
+      </Header>
+    );
   }
 }
 export default withRouter(Tags);

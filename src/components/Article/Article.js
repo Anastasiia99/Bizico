@@ -1,11 +1,17 @@
 import React, { Fragment } from "react";
 import { Card, Icon, Avatar } from "antd";
 import { Link } from "react-router-dom";
+import { SettingContext } from "../../common/SettingConProv";
+import "./Article.scss";
 
 const { Meta } = Card;
+const classNames = require("classnames");
 
 class Article extends React.Component {
+  static contextType = SettingContext;
   render() {
+    const { mode } = this.context;
+    const isNight = mode === "night";
     const {
       title,
       isLoaded,
@@ -25,28 +31,40 @@ class Article extends React.Component {
     );
     return (
       <Card
+        className={classNames("card", { darkCard: isNight })}
         key={title}
         loading={!isLoaded}
         cover={coverImage && <img alt="example" src={coverImage} />}
         actions={[
           <Fragment>
-            <Icon type="heart" />
-            <span className="span">{positiveReactionsCount}</span>
+            <div className={classNames("likes", { darkLikes: isNight })}>
+              <Icon type="heart" />
+              <span className="span">{positiveReactionsCount}</span>
+            </div>
           </Fragment>,
           <Fragment>
-            <Icon type="message" />
-            <span className="span">{commentsCount}</span>
+            <div className={classNames("likes", { darkLikes: isNight })}>
+              <Icon type="message" />
+              <span className="span">{commentsCount}</span>
+            </div>
           </Fragment>
         ]}
       >
         <Meta
           avatar={avatar}
           title={
-            <Link className="links" to={`/articles/${id}`}>
+            <Link
+              className={classNames("links", { darkLinks: isNight })}
+              to={`/articles/${id}`}
+            >
               {title}
             </Link>
           }
-          description={description}
+          description={
+            <div className={classNames("descript", { darkDescr: isNight })}>
+              {description}
+            </div>
+          }
         />
       </Card>
     );

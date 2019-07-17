@@ -7,13 +7,10 @@
   overflow-wrap: break-word;
   text-align: left;
   margin-top: 20px;
+
   h1.longer {
     font-size: calc(1.48vw + 22px);
   }
-  //   img {
-  //     max-width: 100%;
-  //     min-width: 300px;
-  //   }
 
   .coverImg {
     width: 100%;
@@ -37,10 +34,6 @@
     display: inline-block;
     vertical-align: top;
     padding-top: calc(0.5vw + 6px);
-
-    // padding-right: calc(0.5vw + 6px);
-    // padding-bottom: calc(0.5vw + 6px);
-    // padding-left: 0;
   }
   .ltag__link__pic {
     display: inline-block;
@@ -62,5 +55,16 @@
     margin-right: calc(0.4vw + 4px);
     font-size: 0.8em;
     margin-left: 1px;
+  }
+}
+.full-article.darkArt {
+  background-color: #202c3d;
+  color: white;
+  h1.longer {
+    font-size: calc(1.48vw + 22px);
+    color: white;
+  }
+  h1 {
+    color: white;
   }
 }

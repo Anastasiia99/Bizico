@@ -11,9 +11,7 @@ class PrivateRoute extends React.Component {
         {...rest}
         render={props =>
           users.find(
-            user =>
-              user.name === Cookies.get("user").split(".")[0] &&
-              user.password === Cookies.get("user").split(".")[1]
+            user => `${user.name}.${user.password}` === Cookies.get("user")
           ) ? (
             <Component {...props} />
           ) : (

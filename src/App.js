@@ -10,15 +10,21 @@ import UserPage from "./pages/UserPage/UserPage";
 import Tags from "./components/Tags/Tags";
 import FullArticle from "./pages/FullArticle/FullArticle";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import { SettingContext } from "./common/SettingConProv";
 
 const { Content } = Layout;
+const classNames = require("classnames");
 
 class App extends React.Component {
+  static contextType = SettingContext;
+
   render() {
+    const { mode } = this.context;
+    const isNight = mode === "night";
     return (
       <Router>
         <div className="App">
-          <Layout>
+          <Layout className={classNames("layout", { darkLayout: isNight })}>
             <Tags />
             <Content style={{ padding: "0 50px", marginTop: 64 }}>
               <PrivateRoute exact path="/" component={Articles} />

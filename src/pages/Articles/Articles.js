@@ -14,6 +14,7 @@ class Articles extends React.Component {
       nextHref: null
     };
   }
+
   loadItems = page => {
     const {
       match: {

@@ -3,9 +3,12 @@ import { getUser, getArtByUser } from "../../common/api";
 
 import { Card, Icon, Avatar, Col, Descriptions, Row, Input } from "antd";
 import Article from "../../components/Article/Article";
+import { SettingContext } from "../../common/SettingConProv";
+import "./UserPage.scss";
 
 const { Meta } = Card;
 const { Search } = Input;
+const classNames = require("classnames");
 
 class UserPage extends React.Component {
   constructor(props) {
@@ -17,6 +20,7 @@ class UserPage extends React.Component {
       tmpItems: []
     };
   }
+  static contextType = SettingContext;
   componentDidMount() {
     getUser(this.props.match.params.username).then(result => {
       console.log(result);
@@ -93,6 +97,8 @@ class UserPage extends React.Component {
       }
     } = this.state;
     const cards = this.dataList();
+    const { mode } = this.context;
+    const isNight = mode === "night";
     return (
       <div>
         <Col
@@ -101,7 +107,11 @@ class UserPage extends React.Component {
           lg={{ span: 14, offset: 5 }}
         >
           <Row>
-            <Card key={username} loading={!isLoaded}>
+            <Card
+              key={username}
+              loading={!isLoaded}
+              className={classNames("card", { darkCard: isNight })}
+            >
               <Meta
                 avatar={
                   <div>
@@ -115,7 +125,12 @@ class UserPage extends React.Component {
                           rel="noopener noreferrer"
                           href={`https://github.com/${github_username}`}
                         >
-                          <Icon className="icons" type="github" />
+                          <Icon
+                            className={classNames("icons", {
+                              darkIcons: isNight
+                            })}
+                            type="github"
+                          />
                         </a>
                       )}
                       {twitter_username && (
@@ -124,7 +139,12 @@ class UserPage extends React.Component {
                           rel="noopener noreferrer"
                           href={`https://twitter.com/${twitter_username}`}
                         >
-                          <Icon className="icons" type="twitter" />
+                          <Icon
+                            className={classNames("icons", {
+                              darkIcons: isNight
+                            })}
+                            type="twitter"
+                          />
                         </a>
                       )}
                     </Row>
@@ -132,18 +152,28 @@ class UserPage extends React.Component {
                 }
                 title={
                   <div>
-                    <h1>{name}</h1>
-                    <span>@{username}</span>
+                    <h1
+                      className={classNames("username", { darkUser: isNight })}
+                    >
+                      {name}
+                    </h1>
+                    <span
+                      className={classNames("username", { darkUser: isNight })}
+                    >
+                      @{username}
+                    </span>
                   </div>
                 }
                 description={
-                  <div>
+                  <div
+                    className={classNames("descript", { darkDescr: isNight })}
+                  >
                     {summary}
                     <Descriptions
-                      className="descript"
                       border
                       column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
                       layout="vertical"
+                      className={classNames("descript", { darkDescr: isNight })}
                     >
                       <Descriptions.Item label="Location">
                         {location}
